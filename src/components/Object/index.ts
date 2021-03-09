@@ -1,0 +1,1 @@
+export { ObjectModal } from './ObjectModal';
