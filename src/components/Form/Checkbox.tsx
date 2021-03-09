@@ -1,9 +1,8 @@
 import React, { ChangeEventHandler, FunctionComponent } from 'react';
-import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import theme from 'styled-theming';
 import useWhatInput from 'react-use-what-input';
-import { BLACK, BLUE, LIGHT_BLUE, RED, SKY, STEEL, WHITE } from 'Constant/colors';
+import { BLACK, BLUE, RED, SKY, STEEL, WHITE } from 'Constant/colors';
 import { Sprite } from 'components/Sprite';
 
 // const fontColor = theme('mode', {

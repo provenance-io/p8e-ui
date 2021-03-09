@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useState } from 'react';
 import { Modal } from 'components/Modal';
 import { ContractKey } from 'models/keys';
-import { H3, H4, H5 } from 'components/Text';
+import { H5 } from 'components/Text';
 import { HorizontalTable, HorizontalTableRow } from 'components/Table';
 import { Card, CardHeader } from 'components/Card';
 import { Button, ButtonGroup } from 'components/Button';
