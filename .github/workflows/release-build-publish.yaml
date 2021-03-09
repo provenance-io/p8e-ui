@@ -1,0 +1,105 @@
+name: Build and Publish
+
+on:
+  release:
+    types: [created]
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  npm_build:
+    name: Build NPM
+
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: ${{ (github.event_name == 'release' && 'production') || 'staging' }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get Version
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: NPM Install
+        run: npm ci
+
+      - name: Update Version Number
+        run: npm --no-git-tag-version version $VERSION
+        if: github.event_name == 'release'
+
+      - name: NPM Build
+        run: npm run build
+        env:
+          REACT_APP_ENV: ${{ env.NODE_ENV }}
+
+      - name: Upload p8e-ui Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: p8e-ui
+          path: build
+
+  docker_build:
+    name: Build and Push to GitHub Docker Package Registry
+    needs: npm_build
+
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'release'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get Version
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: p8e-ui
+          path: build
+
+      - name: Build image
+        run: docker build . --file docker/Dockerfile --tag "p8e-ui:$VERSION"
+
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKER_REGISTRY_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/p8e-ui
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag "p8e-ui:$VERSION" $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
