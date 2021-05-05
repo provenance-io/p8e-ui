@@ -107,3 +107,11 @@ jobs:
 
           docker tag "p8e-ui:$VERSION" $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+
+          PRERELEASE=${{ github.event.release.prerelease }}
+          echo PRERELEASE=$PRERELEASE
+
+          if [ "$PRERELEASE" == "false" ]; then
+              docker tag "p8e-ui:$VERSION" $IMAGE_ID:latest
+              docker push $IMAGE_ID:latest
+          fi
