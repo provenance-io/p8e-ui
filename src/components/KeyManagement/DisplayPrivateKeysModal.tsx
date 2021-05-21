@@ -17,34 +17,20 @@ export const DisplayPrivateKeysModal: FunctionComponent<DisplayPrivateKeysModalP
         setCloseable(true);
     }, []);
 
-    return <Modal header={`Signing/Encryption Key Pairs${contractKey.alias ? ` for ${contractKey.alias}` : ''}`} closable={closeable} onClose={onClose}>
-        <p>Below are the newly generated Signing/Encryption key pairs.</p>
-        <p><b>Please save these to a secure location, as this is the only time you will be able to view the private keys.</b></p>
+    return <Modal header={`Auth Key Pair${contractKey.alias ? ` for ${contractKey.alias}` : ''}`} closable={closeable} onClose={onClose}>
+        <p>Below is the newly generated Auth key pair.</p>
+        <p><b>Please save these to a secure location, as this is the only time you will be able to view the private key.</b></p>
 
-        <CardHeader>Signing Key</CardHeader>
+        <CardHeader>Auth Key</CardHeader>
         <Card>
             <HorizontalTable>
                 <HorizontalTableRow>
                     <H5>Public:</H5>
-                    <p>{contractKey.signingKey.hexPublicKey}</p>
+                    <p>{contractKey.authKey.hexPublicKey}</p>
                 </HorizontalTableRow>
                 <HorizontalTableRow>
                     <H5>Private:</H5>
-                    <p>{contractKey.signingKey.hexPrivateKey}</p>
-                </HorizontalTableRow>
-            </HorizontalTable>
-        </Card>
-
-        <CardHeader>Encryption Key</CardHeader>
-        <Card>
-            <HorizontalTable>
-                <HorizontalTableRow>
-                    <H5>Public:</H5>
-                    <p>{contractKey.encryptionKey.hexPublicKey}</p>
-                </HorizontalTableRow>
-                <HorizontalTableRow>
-                    <H5>Private:</H5>
-                    <p>{contractKey.encryptionKey.hexPrivateKey}</p>
+                    <p>{contractKey.authKey.hexPrivateKey}</p>
                 </HorizontalTableRow>
             </HorizontalTable>
         </Card>

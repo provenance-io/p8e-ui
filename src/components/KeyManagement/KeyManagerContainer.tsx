@@ -14,7 +14,7 @@ export const KeyManagerContainer = () => {
     const handleAddKey = (type: KeyTypes) => setAddingKey({ adding: !addingKey.adding, type });
     const [newKey, setNewKey] = useState<ContractKey | null>(null)
 
-    const handleCreateKey = ({ signingPrivateKey, encryptionPrivateKey, useSigningKeyForEncryption, indexName, alias }: AddKeyFields) => addContractKey(signingPrivateKey, encryptionPrivateKey, useSigningKeyForEncryption, indexName, alias)
+    const handleCreateKey = ({ signingPrivateKey, encryptionPrivateKey, keyProvider, indexName, alias }: AddKeyFields) => addContractKey(signingPrivateKey, encryptionPrivateKey, keyProvider, indexName, alias)
         .then((key) => {
             setNewKey(key);
             resetAddingKey()

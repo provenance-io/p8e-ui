@@ -1,10 +1,11 @@
+import { HTMLProps } from 'react';
 import styled from 'styled-components';
 
 type InputGroupProps = {
     /** Overrides the default margin */
     margin?: string;
     disabled?: boolean;
-}
+} & HTMLProps<HTMLDivElement>
 
 export const InputGroup = styled.div<InputGroupProps>`
   margin: ${({ margin }) => (margin ? margin : '20px 0')};

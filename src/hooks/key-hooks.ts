@@ -2,12 +2,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getKeys, fetchServiceAccountKey, removeServiceAccountKey, addContractKey as addContractKeyAction, addServiceKey as addServiceKeyAction, updateContractKey, updateServiceKey, fetchContractKeyShares, addContractKeyShare, removeContractKeyShare, linkServiceKey, unlinkServiceKey } from 'actions';
 import { KeyTypes, ContractKey, ServiceKey, KeyShare } from 'models/keys';
+import { KEY_PROVIDERS } from 'Constant/affiliate';
 
 export const usePublicKeys = () => {
     const dispatch = useDispatch();
     const { currentPublicKey, publicKeys, serviceAccountKey, serviceAccountKeyFetched } = useSelector(({ keyReducer }) => keyReducer);
 
-    const addContractKey = (signingPrivateKey: string, encryptionPrivateKey: string, useSigningKeyForEncryption: boolean, indexName: string, alias?: string): Promise<ContractKey> => dispatch(addContractKeyAction(signingPrivateKey, encryptionPrivateKey, useSigningKeyForEncryption, indexName, alias));
+    const addContractKey = (signingPrivateKey: string, encryptionPrivateKey: string, keyProvider: KEY_PROVIDERS, indexName: string, alias?: string): Promise<ContractKey> => dispatch(addContractKeyAction(signingPrivateKey, encryptionPrivateKey, keyProvider, indexName, alias));
     const addServiceKey = (privateKey: string, alias: string): Promise<ServiceKey> => dispatch(addServiceKeyAction(privateKey, alias));
     const updateKey = (type: KeyTypes, publicKey: string, alias: string): Promise<ContractKey | ServiceKey> => {
         const action = (type === 'CONTRACT' ? updateContractKey : updateServiceKey)
