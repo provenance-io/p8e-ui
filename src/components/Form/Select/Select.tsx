@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FunctionComponent, ReactChildren } from 'react';
+import React, { ChangeEventHandler, FunctionComponent } from 'react';
 import styled, { css } from 'styled-components';
 import theme from 'styled-theming';
 import useWhatInput from 'react-use-what-input';

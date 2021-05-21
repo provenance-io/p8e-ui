@@ -8,10 +8,9 @@ import { KeyTypes } from 'models/keys';
 import { Sprite } from 'components/Sprite';
 import { H4 } from 'components/Text';
 import { FlexContainer } from 'components/Layout/Flex';
-import { Checkbox, FormWrapper, TextInput } from 'components/Form';
+import { FormWrapper, TextInput } from 'components/Form';
 import { Modal } from 'components/Modal';
 import { KEY_PROVIDERS, KEY_PROVIDERS_ARRAY, KEY_PROVIDER_META } from 'Constant/affiliate';
-import { Dropdown } from 'components/Dropdown';
 import Select from 'components/Form/Select/Select';
 import styled from 'styled-components';
 
