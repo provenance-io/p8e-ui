@@ -1,1 +1,0 @@
-export const OAUTH_URL = 'https://test.provenance.io/login/oauth/authorize';

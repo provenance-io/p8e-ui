@@ -12,8 +12,6 @@ const App = () => {
     <>
       <Switch>
         <Route exact path="/" component={DashboardContainer} />
-        {/* <Route exact path="/login" component={LoginContainer} /> */}
-        {/* <Route exact path="/register" component={RegisterContainer} /> */}
         <Route exact path="/contracts/:uuid" component={ContractContainer} />
         <Route exact path="/contracts" component={ContractListContainer} />
         <Route exact path="/scopes/:scopeUuid/history/:uuid" component={ScopeHistoryContainer} />
