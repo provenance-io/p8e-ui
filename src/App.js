@@ -1,35 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import DashboardContainer from 'components/Dashboard/DashboardContainer';
 import { ContractContainer, ContractListContainer } from 'components/Contract';
-import { LoginContainer } from 'components/Login';
 import { KeyManagerContainer, AddServiceKeyModal } from 'components/KeyManagement';
-import { OAuthCallback } from 'components/OAuth';
 import KeyDetailsContainer from 'components/KeyManagement/KeyDetailsContainer';
 import { ScopeContainer, ScopeHistoryContainer, ScopeListContainer } from 'components/Scopes';
 import { Settings } from 'Constant';
-import { useDeepLink } from 'hooks';
 
-const App = ({ isAuthenticated }) => {
-  const { performDeepLink } = useDeepLink();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      performDeepLink();
-    }
-  }, [isAuthenticated, performDeepLink]);
-
-  if (!isAuthenticated) {
-    return (
-      <>
-        <Switch>
-          <Route exact path="/oauth/callback" component={OAuthCallback} />
-        </Switch>
-        <LoginContainer />
-      </>
-    );
-  }
-
+const App = () => {
   return (
     <>
       <Switch>
