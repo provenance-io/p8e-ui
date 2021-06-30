@@ -81,7 +81,7 @@ export const AddKeyModalContainer = withFormik<AddKeyModalContainerProps, AddKey
     mapPropsToValues: () => ({
         alias: '',
         indexName: '',
-        keyProvider: KEY_PROVIDERS.SMART_KEY,
+        keyProvider: KEY_PROVIDERS.SMARTKEY,
         signingPrivateKey: '',
         encryptionPrivateKey: '',
     }),
