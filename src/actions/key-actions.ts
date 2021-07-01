@@ -4,6 +4,7 @@ import { ContractKey, ServiceKey } from 'models/keys';
 import { addError } from './error-actions';
 import { handleAndThrow } from 'helpers/general';
 import { ajaxDelete, ajaxGet, ajaxPatch, ajaxPost } from './xhr-actions';
+import { KEY_PROVIDERS } from 'Constant/affiliate';
 
 const AFFILIATE_URL = `${P8E_URL}/keys/affiliate`;
 const SERVICE_URL = `${P8E_URL}/keys/service`;
@@ -33,8 +34,8 @@ export const updateContractKey = (hexPublicKey: string, { alias }: { alias: stri
 
 export const setCurrentKey = (currentKey?: ContractKey) => async dispatch => dispatch(createAction(SET_CURRENT_KEY)(currentKey));
 
-export const addContractKey = (signingPrivateKey: string, encryptionPrivateKey: string, useSigningKeyForEncryption: boolean, indexName: string, alias?: string) => async dispatch => 
-    ajaxPost(ADD_CONTRACT_KEY, dispatch, AFFILIATE_URL, { signingPrivateKey, encryptionPrivateKey, useSigningKeyForEncryption, indexName, alias })
+export const addContractKey = (signingPrivateKey: string, encryptionPrivateKey: string, keyProvider: KEY_PROVIDERS, indexName: string, alias?: string) => async dispatch => 
+    ajaxPost(ADD_CONTRACT_KEY, dispatch, AFFILIATE_URL, { signingPrivateKey, encryptionPrivateKey, keyProvider: keyProvider, indexName, alias })
         .catch(handleAndThrow(() => dispatch(addError('Error adding contract key'))));
 
 export const addServiceKey = (privateKey: string, alias: string) => async dispatch => ajaxPost(ADD_SERVICE_KEY, dispatch, SERVICE_URL, { privateKey, alias })

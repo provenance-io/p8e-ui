@@ -5,6 +5,7 @@ export interface ContractKey {
     indexName: string;
     signingKey: P8EPublicKey;
     encryptionKey: P8EPublicKey;
+    authKey: P8EPublicKey;
     serviceKeys: ServiceKey[];
 }
 

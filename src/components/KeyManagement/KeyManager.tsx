@@ -30,38 +30,30 @@ export const KeyCard: FunctionComponent<KeyCardProps> = ({ keyType, contractOrSe
 
     const publicKey = keyType === 'CONTRACT' ? (contractOrServiceKey as ContractKey).signingKey : (contractOrServiceKey as ServiceKey).publicKey;
     const encryptionPublicKey = keyType === 'CONTRACT' ? (contractOrServiceKey as ContractKey).encryptionKey : null;
+    const authPublicKey = keyType === 'CONTRACT' ? (contractOrServiceKey as ContractKey).authKey : null;
 
     const updateAlias = (alias: string) => updateKey(keyType, publicKey.hexPublicKey, alias);
 
     return <Card>
         <SimpleUpdateInput id={`alias-${publicKey.hexPublicKey}`} value={contractOrServiceKey.alias} onUpdate={updateAlias} placeholder="Enter an alias" />
         <HorizontalTable style={{ marginTop: '10px' }}>
-            <HorizontalTableRow>
-                <H5>Signing Public Key</H5>
+            {([
+                { label: 'Signing Public Key', value: publicKey },
+                { label: 'Encryption Public Key', value: encryptionPublicKey },
+                { label: 'Auth Public Key', value: authPublicKey }
+            ] as const).filter(({ value }) => !!value).map(key => <HorizontalTableRow key={key.label}>
+                <H5>{key.label}</H5>
                 <p style={{ textTransform: 'none' }}>
                     <FlexContainer>
                         <FlexItem>Hex:&nbsp;</FlexItem>
-                        <FlexItem><Pre margin="0" padding="0">{publicKey.hexPublicKey}</Pre></FlexItem>
+                        <FlexItem><Pre margin="0" padding="0">{key.value?.hexPublicKey}</Pre></FlexItem>
                     </FlexContainer>
                     <FlexContainer>
                         <FlexItem>Base 64:&nbsp;</FlexItem>
-                        <FlexItem><Pre margin="0" padding="0">{publicKey.publicKey}</Pre></FlexItem>
+                        <FlexItem><Pre margin="0" padding="0">{key.value?.publicKey}</Pre></FlexItem>
                     </FlexContainer>
                 </p>
-            </HorizontalTableRow>
-            {encryptionPublicKey && <HorizontalTableRow>
-                <H5>Encryption Public Key</H5>
-                <p style={{ textTransform: 'none' }}>
-                    <FlexContainer>
-                        <FlexItem>Hex:&nbsp;</FlexItem>
-                        <FlexItem><Pre margin="0" padding="0">{encryptionPublicKey.hexPublicKey}</Pre></FlexItem>
-                    </FlexContainer>
-                    <FlexContainer>
-                        <FlexItem>Base 64:&nbsp;</FlexItem>
-                        <FlexItem><Pre margin="0" padding="0">{encryptionPublicKey.publicKey}</Pre></FlexItem>
-                    </FlexContainer>
-                </p>
-            </HorizontalTableRow>}
+            </HorizontalTableRow>)}
             {keyType === 'CONTRACT' && <HorizontalTableRow>
                 <H5>Index Name</H5>
                 <p style={{ textTransform: 'none' }}><Pre margin="0" padding="0">{(contractOrServiceKey as ContractKey).indexName}</Pre></p>
