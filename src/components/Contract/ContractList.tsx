@@ -6,6 +6,9 @@ import { getContractTimeSeries } from 'helpers/contract';
 import { Table, TableRow, TD } from 'components/Table';
 import { H2 } from 'components/Text';
 import { Navbar } from 'components/Navbar';
+import { Dropdown } from 'components/Dropdown';
+import styled from 'styled-components';
+import { Color } from 'Constant';
 
 const contractTimeFormatter = (diffS: number) => {
   const duration = moment.duration(diffS, 's');
@@ -44,16 +47,71 @@ interface TypeSelectorProps {
 interface ContractListProps {
   searchTerm?: string;
   searchChanged: (term?: string) => void;
+  searchColumn?: string;
+  searchColumnChanged: (column: string) => void;
   contracts: Contract[];
   type: string;
   typeChanged: (type: string) => void;
 }
 
-const ContractList: FunctionComponent<ContractListProps> = ({ contracts, searchTerm = '', searchChanged, type, typeChanged }) => {
+const SearchToggle = styled.span`
+  padding: 10px 30px 10px 10px;
+  border-radius: 4px;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+  border: 1px solid ${Color.LIGHT_GREY};
+  display: inline-block;
+  position: relative;
+
+  &:hover {
+    border-color: ${Color.BLUE};
+    background-color: ${Color.WHITE};
+  }
+  
+  &:after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    vertical-align: text-bottom;
+    border-top: 7.5px solid ${Color.GREY};
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+  }
+`
+
+const Equals = styled.div`
+  margin: 0 5px;
+`
+
+const SearchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+`
+
+const SearchableColumns = [
+  { key: 'scope_uuid', display: 'Scope Uuid' },
+  { key: 'execution_uuid', display: 'Execution Uuid' },
+  { key: 'group_uuid', display: 'Group Uuid' },
+  { key: 'uuid', display: 'Envelope Uuid' },
+]
+
+const SearchColumnDisplay = SearchableColumns.reduce((acc, column) => acc.set(column.key, column.display), new Map<string, string>())
+
+const ContractList: FunctionComponent<ContractListProps> = ({ contracts, searchColumn = '', searchColumnChanged, searchTerm = '', searchChanged, type, typeChanged }) => {
   return (
     <>
       <Navbar title={<H2>Contracts</H2>}>
-        <SearchBar searchTerm={searchTerm} searchChanged={searchChanged} />
+        <SearchWrapper>
+          <Dropdown toggle={<SearchToggle>{SearchColumnDisplay.get(searchColumn)}</SearchToggle>} menuList={SearchableColumns.map(column => 
+            <span key={column.key} onClick={() => searchColumnChanged(column.key)}>{column.display}</span>
+          )}></Dropdown>
+          <Equals>=</Equals>
+          <SearchBar searchTerm={searchTerm} searchChanged={searchChanged} />
+        </SearchWrapper>
       </Navbar>
 
       <Table headers={[

@@ -6,14 +6,24 @@ import ContractList from './ContractList';
 
 const ContractListContainer = () => {
   const { params, setParam } = useQueryParams();
-  const [searchTerm, setSearchTerm] = useState(params.q);
+  const [column, uuid] = params.q?.split(',') || ['scope_uuid', ''];
+  const [searchColumn, setSearchColumn] = useState(column);
+  const [searchTerm, setSearchTerm] = useState(uuid);
   const [type, setType] = useState(params.type || 'invoker');
-  const { contracts, fetchingContracts } = useContractIndex(searchTerm, type);
+  const { contracts, fetchingContracts } = useContractIndex(searchTerm?.trim().length > 0 ? `${searchColumn},${searchTerm}` : '', type);
+
+  const setQ = (column, uuid) => setParam('q', `${column},${uuid}`);
+
+  const searchColumnChanged = column => {
+    setSearchColumn(column);
+    setQ(column, searchTerm);
+  };
 
   const searchChanged = term => {
     setSearchTerm(term);
-    setParam('q', term);
+    setQ(searchColumn, term)
   };
+
 
   const typeChanged = type => {
     setType(type);
@@ -26,6 +36,8 @@ const ContractListContainer = () => {
         contracts={contracts}
         searchTerm={searchTerm}
         searchChanged={searchChanged}
+        searchColumn={searchColumn}
+        searchColumnChanged={searchColumnChanged}
         type={type}
         typeChanged={typeChanged}
       />
