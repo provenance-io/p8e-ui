@@ -50,7 +50,7 @@ jobs:
           REACT_APP_ENV: ${{ env.NODE_ENV }}
 
       - name: Upload p8e-ui Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: p8e-ui
           path: build
