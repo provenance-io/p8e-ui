@@ -20,7 +20,7 @@ jobs:
       NODE_ENV: ${{ (github.event_name == 'release' && 'production') || 'staging' }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.0.2
 
       - name: Get Version
         run: |
@@ -64,7 +64,7 @@ jobs:
     if: github.event_name == 'release'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.0.2
 
       - name: Get Version
         run: |
